@@ -21,7 +21,6 @@ public class BankAgentController {
         AgentResponse response = bankAgentService.processCommand(command);
         return ResponseEntity.ok(Map.of(
                 "reply", response.getReply(),
-                "success", response.isSuccess()
-        ));
+                "success", response.isSuccess()));
     }
 }
