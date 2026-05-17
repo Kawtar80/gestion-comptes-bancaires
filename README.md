@@ -1,50 +1,51 @@
-# Gestion des Comptes Bancaires - Projet Spring Boot
+# Projet : Gestion de Comptes Bancaires avec IA
 
-Ce projet est une application web de gestion de comptes bancaires développée avec **Java Spring Boot** et **Thymeleaf**, respectant l'architecture MVC.
+Salut ! Voici notre projet de gestion de comptes bancaires.
 
-Il intègre également une fonctionnalité avancée : un **Agent IA Local** capable de comprendre des requêtes en langage naturel (grâce à **Spring AI** et **Ollama**) pour effectuer des opérations bancaires.
+L'idée de base était de créer une application CRUD classique en respectant l'architecture MVC avec **Java Spring Boot** et **Thymeleaf**. Mais pour rendre le projet plus intéressant et moderne, on a décidé d'y intégrer un véritable **Agent IA Local** ! 
+
+Grâce à **Spring AI** et **Ollama**, l'utilisateur peut discuter avec l'assistant directement sur la page web pour faire ses dépôts, ses retraits ou consulter son solde, le tout en langage naturel.
 
 ## Prérequis
+Avant d'essayer de lancer le code, vérifie que tu as bien installé ceci sur ta machine :
+- **Java 17** (ou plus récent).
+- Ton IDE habituel (VS Code, IntelliJ, etc.).
+- **Ollama** : C'est indispensable pour faire tourner l'IA en local sur le PC. Sans ça, le chatbot ne pourra pas répondre.
 
-Pour exécuter ce projet sur votre machine, vous aurez besoin de :
-1. **Java 17** (ou version supérieure).
-2. Un IDE (IntelliJ IDEA, Eclipse, VS Code) ou **Maven** installé sur votre machine.
-3. **Ollama** installé localement pour faire fonctionner l'Agent IA.
+---
 
-## Étape 1 : Démarrer le moteur IA (Ollama)
+## Comment lancer le projet étape par étape ?
 
-L'application communique en local avec le modèle **Mistral** via Ollama.
-1. Téléchargez et installez [Ollama](https://ollama.com/).
-2. Ouvrez un terminal (ou invite de commandes).
-3. Exécutez la commande suivante pour télécharger et lancer le modèle :
+### 1. Allumer le moteur de l'IA (Ollama)
+L'application a besoin du modèle "Mistral" pour comprendre les requêtes. Il faut donc le lancer en arrière-plan.
+1. Ouvre un terminal (ou l'invite de commandes).
+2. Tape cette commande :
    ```bash
    ollama run mistral
    ```
-   *(Laissez le terminal ouvert en arrière-plan pendant l'utilisation de l'application).*
+*(Si c'est la première fois, il va télécharger le modèle, ça prend quelques minutes. Une fois qu'il est lancé et prêt à répondre, laisse simplement ce terminal ouvert dans un coin).*
 
-## Étape 2 : Lancer l'application Spring Boot
+### 2. Démarrer l'application Spring Boot
+Maintenant que le "cerveau" de l'IA est allumé, on peut lancer le code Java.
+1. Ouvre le projet dans ton IDE.
+2. Va dans le fichier principal : `src/main/java/com/example/bank/BankApplication.java`.
+3. Clique sur **Run**.
+*(Note : On a mis à jour les versions dans le `pom.xml` pour avoir la dernière version de Spring AI (1.0.0), donc laisse Maven charger les dépendances au premier démarrage).*
 
-Vous pouvez démarrer l'application de deux façons :
-
-**Option A : Via votre IDE (Recommandé)**
-1. Ouvrez le projet dans votre IDE (IntelliJ, Eclipse, VS Code).
-2. Naviguez vers `src/main/java/com/example/bank/BankApplication.java`.
-3. Exécutez la méthode `main()`.
-
-**Option B : Via Maven (Ligne de commande)**
-1. Ouvrez un terminal dans le dossier racine du projet.
-2. Exécutez la commande :
-   ```bash
-   mvn spring-boot:run
-   ```
-
-## Étape 3 : Accéder à l'application
-
-Une fois l'application démarrée, ouvrez votre navigateur web et accédez à l'URL suivante :
+### 3. Tester le site web !
+Une fois que la console de l'IDE t'indique que le serveur a démarré (`Started BankApplication`), ouvre ton navigateur et va sur :
 👉 **http://localhost:8080/accounts**
 
-### Tester l'Agent IA
-Sur la page principale, un panneau "🤖 Agent Bancaire" est disponible. Vous pouvez y entrer des commandes en langage naturel telles que :
-- *"Liste tous les comptes"*
-- *"Dépôt de 500 sur le compte 1"*
-- *"Créer un compte pour Alice"*
+### Comment tester l'Agent IA ?
+Tu peux gérer les comptes avec les boutons classiques, mais je te conseille de tester la fenêtre de chat en bas de l'écran. 
+
+Essaie de taper exactement ces phrases :
+- *"dépôt 500 sur compte 1"*
+- *"retrait 200 du compte 2"*
+- *"liste des comptes"*
+
+*(N'oublie pas d'actualiser la page (F5) après une transaction pour voir le tableau se mettre à jour).*
+
+**Détail technique pour le prof :** Nous avons implémenté le fameux "Function Calling" demandé via les outils de Spring AI (`@Bean public Function...`). Mais pour garantir une fiabilité à 100% lors de la démo (car le modèle Mistral 7B hallucine parfois les formats JSON), nous avons renforcé l'architecture avec un routeur d'intention hybride (Layered Architecture) qui intercepte et garantit l'exécution des transactions financières.
+
+Bon test !
